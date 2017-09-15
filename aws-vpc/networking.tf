@@ -13,18 +13,30 @@ resource "aws_internet_gateway" "igw" {
   }
 }
 
-resource "aws_eip" "nat-eip-a" {vpc = true}
-resource "aws_eip" "nat-eip-b" {vpc = true}
-resource "aws_eip" "nat-eip-c" {vpc = true}
+resource "aws_eip" "nat-eip-a" {
+  count = "${var.enable-be-nat ? 1 : 0}"
+  vpc = true
+}
+resource "aws_eip" "nat-eip-b" {
+  count = "${var.enable-be-nat && var.number-of-azs > 1 ? 1 : 0}"
+  vpc = true
+}
+resource "aws_eip" "nat-eip-c" {
+  count = "${var.enable-be-nat && var.number-of-azs > 2 ? 1 : 0}"
+  vpc = true
+}
 resource "aws_nat_gateway" "nat-gateway-a" {
+  count = "${var.enable-be-nat ? 1 : 0}"
   allocation_id = "${aws_eip.nat-eip-a.id}"
   subnet_id     = "${aws_subnet.public-a.id}"
 }
 resource "aws_nat_gateway" "nat-gateway-b" {
+  count = "${var.enable-be-nat && var.number-of-azs > 1 ? 1 : 0}"
   allocation_id = "${aws_eip.nat-eip-b.id}"
   subnet_id     = "${aws_subnet.public-b.id}"
 }
 resource "aws_nat_gateway" "nat-gateway-c" {
+  count = "${var.enable-be-nat && var.number-of-azs > 2 ? 1 : 0}"
   allocation_id = "${aws_eip.nat-eip-c.id}"
   subnet_id     = "${aws_subnet.public-c.id}"
 }
@@ -41,6 +53,7 @@ resource "aws_subnet" "public-a" {
   }
 }
 resource "aws_subnet" "public-b" {
+  count = "${var.number-of-azs > 1 ? 1 : 0}"
   vpc_id                    = "${aws_vpc.vpc.id}"
   availability_zone         = "${var.region}b"
   cidr_block                = "${var.public-subnet-b-cidr}"
@@ -50,6 +63,7 @@ resource "aws_subnet" "public-b" {
   }
 }
 resource "aws_subnet" "public-c" {
+  count = "${var.number-of-azs > 2 ? 1 : 0}"
   vpc_id                    = "${aws_vpc.vpc.id}"
   availability_zone         = "${var.region}c"
   cidr_block                = "${var.public-subnet-c-cidr}"
@@ -72,6 +86,7 @@ resource "aws_subnet" "private-a" {
   }
 }
 resource "aws_subnet" "private-b" {
+  count = "${var.number-of-azs > 1 ? 1 : 0}"
   vpc_id                    = "${aws_vpc.vpc.id}"
   availability_zone         = "${var.region}b"
   cidr_block                = "${var.private-subnet-b-cidr}"
@@ -81,6 +96,7 @@ resource "aws_subnet" "private-b" {
   }
 }
 resource "aws_subnet" "private-c" {
+  count = "${var.number-of-azs > 2 ? 1 : 0}"
   vpc_id                    = "${aws_vpc.vpc.id}"
   availability_zone         = "${var.region}c"
   cidr_block                = "${var.private-subnet-c-cidr}"
@@ -108,10 +124,12 @@ resource "aws_route_table_association" "public-route-table-subnet-assoc-a" {
   subnet_id = "${aws_subnet.public-a.id}"
 }
 resource "aws_route_table_association" "public-route-table-subnet-assoc-b" {
+  count = "${var.number-of-azs > 1 ? 1 : 0}"
   route_table_id = "${aws_route_table.public-route-table.id}"
   subnet_id = "${aws_subnet.public-b.id}"
 }
 resource "aws_route_table_association" "public-route-table-subnet-assoc-c" {
+  count = "${var.number-of-azs > 2 ? 1 : 0}"
   route_table_id = "${aws_route_table.public-route-table.id}"
   subnet_id = "${aws_subnet.public-c.id}"
 }
@@ -131,12 +149,14 @@ resource "aws_route_table" "private-route-table-a" {
   }
 }
 resource "aws_route_table" "private-route-table-b" {
+  count = "${var.number-of-azs > 1 ? 1 : 0}"
   vpc_id = "${aws_vpc.vpc.id}"
   tags {
     Name = "${var.environment}-private-route-table-b"
   }
 }
 resource "aws_route_table" "private-route-table-c" {
+  count = "${var.number-of-azs > 2 ? 1 : 0}"
   vpc_id = "${aws_vpc.vpc.id}"
   tags {
     Name = "${var.environment}-private-route-table-c"
@@ -147,24 +167,29 @@ resource "aws_route_table_association" "private-route-table-subnet-assoc-a" {
   subnet_id = "${aws_subnet.private-a.id}"
 }
 resource "aws_route_table_association" "private-route-table-subnet-assoc-b" {
+  count = "${var.number-of-azs > 1 ? 1 : 0}"
   route_table_id = "${aws_route_table.private-route-table-b.id}"
   subnet_id = "${aws_subnet.private-b.id}"
 }
 resource "aws_route_table_association" "private-route-table-subnet-assoc-c" {
+  count = "${var.number-of-azs > 2 ? 1 : 0}"
   route_table_id = "${aws_route_table.private-route-table-c.id}"
   subnet_id = "${aws_subnet.private-c.id}"
 }
 resource "aws_route" "private-route-default-a" {
+  count = "${var.enable-be-nat ? 1 : 0}"
   route_table_id            = "${aws_route_table.private-route-table-a.id}"
   destination_cidr_block    = "0.0.0.0/0"
   nat_gateway_id            = "${aws_nat_gateway.nat-gateway-a.id}"
 }
 resource "aws_route" "private-route-default-b" {
+  count = "${var.enable-be-nat && var.number-of-azs > 1 ? 1 : 0}"
   route_table_id            = "${aws_route_table.private-route-table-b.id}"
   destination_cidr_block    = "0.0.0.0/0"
   nat_gateway_id            = "${aws_nat_gateway.nat-gateway-b.id}"
 }
 resource "aws_route" "private-route-default-c" {
+  count = "${var.enable-be-nat && var.number-of-azs > 2 ? 1 : 0}"
   route_table_id            = "${aws_route_table.private-route-table-c.id}"
   destination_cidr_block    = "0.0.0.0/0"
   nat_gateway_id            = "${aws_nat_gateway.nat-gateway-c.id}"

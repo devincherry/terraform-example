@@ -1,19 +1,11 @@
 ## provides subnet IDs in a way that can be dynamically looked-up by other modules
 output "public_subnets" {
-  value = {
-    "a" = "${aws_subnet.public-a.id}"
-    "b" = "${aws_subnet.public-b.id}"
-    "c" = "${aws_subnet.public-c.id}"
-  }
+  value = ["${aws_subnet.public-a.id}", "${aws_subnet.public-b.id}", "${aws_subnet.public-c.id}"]
 }
 
 ## provides subnet IDs in a way that can be dynamically looked-up by other modules
 output "private_subnets" {
-  value = {
-    "a" = "${aws_subnet.private-a.id}"
-    "b" = "${aws_subnet.private-b.id}"
-    "c" = "${aws_subnet.private-c.id}"
-  }
+  value = ["${aws_subnet.private-a.id}", "${aws_subnet.private-b.id}", "${aws_subnet.private-c.id}"]
 }
 
 ## provide security group IDs in a way that can be dynamically looked-up by other modules
