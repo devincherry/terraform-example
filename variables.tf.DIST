@@ -1,15 +1,36 @@
+/*** Environment-specific Settings ***/
+
+// The AWS region to configure resources within
 variable "aws-region" {
   default = "us-east-1"
 }
 
+// The name of the SSH key instances will be provisioned to allow access with
 variable "ssh-key-name" {
   default = "admin"
 }
 
+// Share credentials with tools like 'aws-cli' etc...
 variable "aws-credentials-file" {
   default = "/home/someuser/.aws/credentials"
 }
 
+// Allow using different credentials profiles for multiple aws accounts
 variable "aws-credentials-profile" {
   default = "personal_creds"
 }
+
+
+/*** AMIs ***/
+
+// Official Ubuntu 16.04 LTS AMIs to use for various regions
+variable "ubuntu1604-hvm-gp2-amis" {
+  type = "map"
+  default = {
+    "us-east-1" = "ami-1d4e7a66"
+    "us-east-2" = "ami-dbbd9dbe"
+    "us-west-1" = "ami-969ab1f6"
+    "us-west-2" = "ami-8803e0f0"
+  }
+}
+
