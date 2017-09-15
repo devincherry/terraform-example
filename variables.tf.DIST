@@ -1,0 +1,15 @@
+variable "aws-region" {
+  default = "us-east-1"
+}
+
+variable "ssh-key-name" {
+  default = "admin"
+}
+
+variable "aws-credentials-file" {
+  default = "/home/someuser/.aws/credentials"
+}
+
+variable "aws-credentials-profile" {
+  default = "personal_creds"
+}

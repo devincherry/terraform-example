@@ -1,0 +1,10 @@
+variable "region" {}
+variable "ssh-key" {}
+variable "environment" {}
+variable "vpc-cidr" {}
+variable "public-subnet-a-cidr" {}
+variable "public-subnet-b-cidr" {}
+variable "public-subnet-c-cidr" {}
+variable "private-subnet-a-cidr" {}
+variable "private-subnet-b-cidr" {}
+variable "private-subnet-c-cidr" {}
