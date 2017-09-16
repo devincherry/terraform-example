@@ -8,13 +8,13 @@ This terraform repo is intended to be reusable for any number of environments, w
 Several modules are included within this repo. The primary ones are listed below, along with a description of their intended purpose.
 
 * `aws-vpc` - This module provides the scalable network foundation for an AWS-based project. See `aws-vpc/inputs.tf` for available variables and usage explanations. By default, this module should create a single VPC, with non-redundant public and private subnets, and some basic security groups to help enforce secure access patterns between instances and other resources.
-* `demoapp` - This module provides a template for creating a server stack. The idea is to define all resources for a given SaaS stack within a similarly structured module, such that you can provision multiple copies of that SaaS stack as-needed (e.g. one for dev, staging, and prod respectively).
+* `demoapp-stack` - This module provides a template for creating a server stack. The idea is to define all resources for a given SaaS stack within a similarly structured module, such that you can provision multiple copies of that SaaS stack as-needed (e.g. one for dev, staging, and prod respectively).
 
 ### Files
 A couple terraform files are provided for either configuring your environment-specific settings, or for use as templates/examples for further customization. Key files are listed below:
 
 * `settings.tf.DIST` - This is a template, which should be copied to `settings.tf` (or similar) and modified for your specific needs. Some default values are defined to help you along your way.
-* `dev-environment.tf` - This file is intended to define an initial development environment, complete with an `aws-vpc`, and an example `demoapp` stack. Modify as-needed.
+* `dev-environment.tf` - This file is intended to define an initial development environment, complete with an `aws-vpc`, and an example `demoapp-stack`. Modify as-needed.
 * `providers.tf` - This file is used to define and configure your terraform providers, such as the `aws` provider. Modify as-needed.
 
 ## Usage
