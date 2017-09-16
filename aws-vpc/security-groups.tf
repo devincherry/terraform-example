@@ -75,6 +75,13 @@ resource "aws_security_group" "fe-appservers" {
     protocol      = "icmp"
     cidr_blocks   = ["${var.vpc-cidr}"]
   }
+  // allow egress to anywhere
+  egress {
+    from_port     = 0
+    to_port       = 0
+    protocol      = "-1"
+    cidr_blocks   = ["0.0.0.0/0"]
+  }
 }
 
 resource "aws_security_group" "be-appservers" {
@@ -98,5 +105,12 @@ resource "aws_security_group" "be-appservers" {
     to_port       = -1
     protocol      = "icmp"
     cidr_blocks   = ["${var.vpc-cidr}"]
+  }
+  // allow egress to anywhere
+  egress {
+    from_port     = 0
+    to_port       = 0
+    protocol      = "-1"
+    cidr_blocks   = ["0.0.0.0/0"]
   }
 }
