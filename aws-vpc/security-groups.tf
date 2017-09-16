@@ -61,6 +61,13 @@ resource "aws_security_group" "fe-appservers" {
     protocol      = "tcp"
     security_groups = ["${aws_security_group.public-lbs.id}"]
   }
+  // allow SSH from a restricted IP
+  ingress {
+    from_port     = 22
+    to_port       = 22
+    protocol      = "tcp"
+    cidr_blocks   = ["${var.admin-ip}/32"]
+  }
   // allow ping from VPC IP space
   ingress {
     from_port     = 8

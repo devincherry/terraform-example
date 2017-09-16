@@ -6,5 +6,5 @@
 .terraform/
 
 # my environment-specific files
-variables.tf
+settings.tf
 setup-env

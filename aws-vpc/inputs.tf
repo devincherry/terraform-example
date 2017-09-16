@@ -1,8 +1,12 @@
 // The aws region
 variable "region" {}
 
-// The ssh-key name to create (used by aws_instances)
-variable "ssh-key" {}
+// The ssh-key name to use (used by aws_instances)
+variable "ssh-key-name" {}
+variable "ssh-pubkey" {}
+
+// Creates a security group exception allowing this IP to SSH into public instances
+variable "admin-ip" {default = "240.0.0.123"}
 
 // The logical environment, used for naming & tagging mostly
 variable "environment" {}

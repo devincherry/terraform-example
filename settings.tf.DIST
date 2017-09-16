@@ -10,6 +10,16 @@ variable "ssh-key-name" {
   default = "admin"
 }
 
+// The SSH pubkey data to use for ${var.ssh-key-name}
+variable "ssh-pubkey" {
+  default = "ssh-rsa XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX admin@laptop"
+}
+
+// Set this to your public IP if you want to SSH into your public instances
+variable "my-ip" {
+  default = "240.0.0.123"
+}
+
 // Share credentials with tools like 'aws-cli' etc...
 variable "aws-credentials-file" {
   default = "/home/someuser/.aws/credentials"
