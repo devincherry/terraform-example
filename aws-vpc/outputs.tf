@@ -15,5 +15,6 @@ output "security-groups" {
     "internal-lbs"   = "${aws_security_group.internal-lbs.id}"
     "fe-appservers" = "${aws_security_group.fe-appservers.id}"
     "be-appservers" = "${aws_security_group.be-appservers.id}"
+    "sshgw-hosts" = "${aws_security_group.sshgw-hosts.id}"
   }
 }

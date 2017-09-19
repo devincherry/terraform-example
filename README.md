@@ -15,7 +15,7 @@ A couple terraform files are provided for either configuring your environment-sp
 
 * `settings.tf.DIST` - This is a template, which should be copied to `settings.tf` (or similar) and modified for your specific needs. Some default values are defined to help you along your way.
 * `dev-environment.tf` - This file is intended to define an initial development environment, complete with an `aws-vpc`, and an example `demoapp-stack`. Modify as-needed.
-* `providers.tf` - This file is used to define and configure your terraform providers, such as the `aws` provider. Modify as-needed.
+* `common.tf` - This file is used to define and configure your terraform providers, such as the `aws` provider. It also defines some resources that are common amongst all environments. Modify as-needed.
 
 ## Usage
 First, you'll need to copy `settings.tf.DIST` to a new file `my-settings.tf`. Edit the file as-needed, to use your own AWS credentials, and to specify your desired region and any other settings you'd like to change.

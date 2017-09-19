@@ -66,7 +66,7 @@ resource "aws_security_group" "fe-appservers" {
     from_port     = 22
     to_port       = 22
     protocol      = "tcp"
-    cidr_blocks   = ["${var.admin-ip}/32"]
+    security_groups = ["${aws_security_group.sshgw-hosts.id}"]
   }
   // allow ping from VPC IP space
   ingress {
@@ -114,3 +114,28 @@ resource "aws_security_group" "be-appservers" {
     cidr_blocks   = ["0.0.0.0/0"]
   }
 }
+
+resource "aws_security_group" "sshgw-hosts" {
+  name          = "${var.environment}-sshgw-hosts"
+  description   = "SSH proxy hosts"
+  vpc_id        = "${aws_vpc.vpc.id}"
+  tags {
+    Name        = "${var.environment}-sshgw-hosts"
+  }
+
+  // allow ssh from admin-ip
+  ingress {
+    from_port     = 22 
+    to_port       = 22
+    protocol      = "tcp"
+    cidr_blocks   = ["${var.admin-ip}/32"]
+  }
+  // allow egress to anywhere
+  egress {
+    from_port     = 0
+    to_port       = 0
+    protocol      = "-1"
+    cidr_blocks   = ["0.0.0.0/0"]
+  }
+}
+
